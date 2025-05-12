@@ -1,0 +1,14 @@
+[Unit]
+Description=Game Log Hub Service
+After=network.target
+
+[Service]
+Type=simple
+User=luojie
+WorkingDirectory=/home/luojie/workspace/game_log_hub
+ExecStart=/home/luojie/workspace/game_log_hub/game_log_hub
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target 

@@ -35,7 +35,7 @@ game_log_hub/
 
 - `GET /api/login-errors` - Get a paginated list of login errors
 - `GET /api/login-errors/:id` - Get a specific login error by ID
-- `POST /api/login-errors` - Create a new login error record
+- `POST /api/login-errors/` - Create a new login error record (note the trailing slash)
 - `DELETE /api/login-errors/:id` - Delete a login error record
 
 ## Running the Application
@@ -46,6 +46,36 @@ game_log_hub/
    go run main.go
    ```
 3. Access the web interface at http://localhost:8080
+
+## Setting up as a System Service
+
+To set up Game Log Hub as a system service that starts automatically on boot:
+
+1. Create a systemd service file:
+   ```bash
+   sudo cp game_log_hub.service /etc/systemd/system/
+   sudo systemctl daemon-reload
+   ```
+
+2. Enable and start the service:
+   ```bash
+   sudo systemctl enable game_log_hub.service
+   sudo systemctl start game_log_hub.service
+   ```
+
+3. Check service status:
+   ```bash
+   sudo systemctl status game_log_hub.service
+   ```
+
+4. Service management commands:
+   ```bash
+   # Stop the service
+   sudo systemctl stop game_log_hub.service
+   
+   # Restart the service
+   sudo systemctl restart game_log_hub.service
+   ```
 
 ## Sample API Request
 
