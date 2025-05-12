@@ -41,40 +41,52 @@ game_log_hub/
 ## Running the Application
 
 1. Clone the repository
-2. Run the application:
+2. Build the application:
    ```bash
-   go run main.go
+   go build -o game_log_hub
    ```
-3. Access the web interface at http://localhost:8080
+3. Run the application:
+   ```bash
+   ./game_log_hub
+   ```
+4. Access the web interface at http://localhost:8080
 
 ## Setting up as a System Service
 
 To set up Game Log Hub as a system service that starts automatically on boot:
 
-1. Create a systemd service file:
+1. Build the application:
+   ```bash
+   go build -o game_log_hub
+   ```
+
+2. Create a systemd service file:
    ```bash
    sudo cp game_log_hub.service /etc/systemd/system/
    sudo systemctl daemon-reload
    ```
 
-2. Enable and start the service:
+3. Enable and start the service:
    ```bash
    sudo systemctl enable game_log_hub.service
    sudo systemctl start game_log_hub.service
    ```
 
-3. Check service status:
+4. Check service status:
    ```bash
    sudo systemctl status game_log_hub.service
    ```
 
-4. Service management commands:
+5. Service management commands:
    ```bash
    # Stop the service
    sudo systemctl stop game_log_hub.service
    
    # Restart the service
    sudo systemctl restart game_log_hub.service
+   
+   # View logs
+   sudo journalctl -u game_log_hub.service
    ```
 
 ## Sample API Request

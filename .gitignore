@@ -1,0 +1,29 @@
+# Binaries for programs and plugins
+game_log_hub
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# SQLite database
+*.db
+*.db-journal
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Go workspace file
+go.work
+
+# Dependency directories (remove the comment below if you want to ignore them too)
+# vendor/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo 
