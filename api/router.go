@@ -18,9 +18,25 @@ func SetupRouter() *gin.Engine {
 		})
 	})
 
+	// Password middleware for main page
+	passwordAuth := func(c *gin.Context) {
+		password := c.Query("password")
+		if password != "68fR9tK3zX7pQ2" {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"status":  "unauthorized",
+				"message": "Invalid password",
+			})
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+
 	// Serve static files for the front-end
 	router.Static("/assets", "./public")
-	router.StaticFile("/", "./public/index.html")
+	router.GET("/", passwordAuth, func(c *gin.Context) {
+		c.File("./public/index.html")
+	})
 
 	// API routes
 	api := router.Group("/api")

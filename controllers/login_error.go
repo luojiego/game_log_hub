@@ -18,6 +18,11 @@ func CreateLoginError(c *gin.Context) {
 		return
 	}
 
+	// Set IP address if it's not provided
+	if loginError.IP == "" {
+		loginError.IP = c.ClientIP()
+	}
+
 	loginError.CreatedAt = time.Now()
 	result := database.DB.Create(&loginError)
 	if result.Error != nil {

@@ -4,78 +4,187 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Log Hub - Login Errors</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- AdminLTE -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
     <style>
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        .card-count {
+            font-size: 2rem;
+            font-weight: bold;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        .error-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
         }
-        .error-table {
-            width: 100%;
-            margin-top: 20px;
+        .badge-device-save {
+            background-color: #dc3545;
         }
-        .pagination {
-            margin-top: 20px;
-            display: flex;
-            justify-content: center;
+        .badge-login-fail {
+            background-color: #fd7e14;
+        }
+        .error-message-cell {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .json-formatter {
+            white-space: pre-wrap;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .table td {
+            vertical-align: middle;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Game Log Hub - Login Errors</h1>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addErrorModal">Add Test Error</button>
-        </div>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="#" class="nav-link">Home</a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
 
-        <div class="row mb-3">
-            <div class="col">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Errors</h5>
-                        <h2 id="total-count">0</h2>
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="#" class="brand-link">
+                <span class="brand-text font-weight-light">Game Log Hub</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">
+                                <i class="nav-icon fas fa-exclamation-triangle"></i>
+                                <p>Login Errors</p>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Login Errors</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Login Errors</li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <!-- /.content-header -->
 
-        <div class="table-responsive">
-            <table class="table table-striped error-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>User ID</th>
-                        <th>Username</th>
-                        <th>Error Type</th>
-                        <th>Error Message</th>
-                        <th>IP</th>
-                        <th>Platform</th>
-                        <th>Device</th>
-                        <th>Time</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="error-table-body">
-                    <!-- Data will be populated here -->
-                </tbody>
-            </table>
-        </div>
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Info boxes -->
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-exclamation-circle"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Total Errors</span>
+                                    <span class="info-box-number" id="total-count">0</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-12 col-sm-6 col-md-9">
+                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addErrorModal">
+                                <i class="fas fa-plus"></i> Add Test Error
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.row -->
 
-        <div class="pagination">
-            <nav>
-                <ul class="pagination" id="pagination-container">
-                    <!-- Pagination will be populated here -->
-                </ul>
-            </nav>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Login Error Records</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body table-responsive p-0">
+                                    <table class="table table-hover text-nowrap">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>User ID</th>
+                                                <th>Username</th>
+                                                <th>Error Type</th>
+                                                <th>Error Message</th>
+                                                <th>IP</th>
+                                                <th>Platform</th>
+                                                <th>Device</th>
+                                                <th>Time</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="error-table-body">
+                                            <!-- Data will be populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                                <div class="card-footer clearfix">
+                                    <ul class="pagination pagination-sm m-0 float-right" id="pagination-container">
+                                        <!-- Pagination will be populated here -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
         </div>
+        <!-- /.content-wrapper -->
+
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-inline">
+                Game Log Hub
+            </div>
+            <strong>Copyright &copy; 2023</strong> All rights reserved.
+        </footer>
     </div>
+    <!-- ./wrapper -->
 
     <!-- Add Error Modal -->
     <div class="modal fade" id="addErrorModal" tabindex="-1" aria-labelledby="addErrorModalLabel" aria-hidden="true">
@@ -83,20 +192,22 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addErrorModalLabel">Add Test Login Error</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form id="add-error-form">
-                        <div class="mb-3">
-                            <label for="userId" class="form-label">User ID</label>
+                        <div class="form-group">
+                            <label for="userId">User ID</label>
                             <input type="text" class="form-control" id="userId" value="12345">
                         </div>
-                        <div class="mb-3">
-                            <label for="userName" class="form-label">Username</label>
+                        <div class="form-group">
+                            <label for="userName">Username</label>
                             <input type="text" class="form-control" id="userName" value="testuser">
                         </div>
-                        <div class="mb-3">
-                            <label for="errorType" class="form-label">Error Type</label>
+                        <div class="form-group">
+                            <label for="errorType">Error Type</label>
                             <select class="form-control" id="errorType">
                                 <option value="authentication_failed">Authentication Failed</option>
                                 <option value="account_locked">Account Locked</option>
@@ -104,16 +215,16 @@
                                 <option value="server_error">Server Error</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="errorMsg" class="form-label">Error Message</label>
+                        <div class="form-group">
+                            <label for="errorMsg">Error Message</label>
                             <input type="text" class="form-control" id="errorMsg" value="Invalid username or password">
                         </div>
-                        <div class="mb-3">
-                            <label for="ip" class="form-label">IP Address</label>
-                            <input type="text" class="form-control" id="ip" value="192.168.1.1">
+                        <div class="form-group">
+                            <label for="ip">IP Address</label>
+                            <input type="text" class="form-control" id="ip" placeholder="Leave empty to use client IP">
                         </div>
-                        <div class="mb-3">
-                            <label for="platform" class="form-label">Platform</label>
+                        <div class="form-group">
+                            <label for="platform">Platform</label>
                             <select class="form-control" id="platform">
                                 <option value="Windows">Windows</option>
                                 <option value="iOS">iOS</option>
@@ -122,21 +233,50 @@
                                 <option value="Linux">Linux</option>
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="device" class="form-label">Device</label>
+                        <div class="form-group">
+                            <label for="device">Device</label>
                             <input type="text" class="form-control" id="device" value="Desktop">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" id="submit-error">Submit</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Error Details Modal -->
+    <div class="modal fade" id="errorDetailsModal" tabindex="-1" aria-labelledby="errorDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorDetailsModalLabel">Error Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Error Message:</label>
+                        <div id="errorMsgFull" class="p-3 bg-light"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+    
     <script>
         let currentPage = 1;
         const pageSize = 10;
@@ -150,6 +290,51 @@
             document.getElementById('submit-error').addEventListener('click', addLoginError);
         });
 
+        // Helper function to truncate text
+        function truncateText(text, maxLength = 30) {
+            if (!text) return '';
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        }
+
+        // Helper function to detect and format JSON
+        function formatErrorMessage(message) {
+            if (!message) return '';
+            
+            try {
+                // Try to parse JSON
+                const jsonObj = JSON.parse(message);
+                return `<pre class="json-formatter">${JSON.stringify(jsonObj, null, 2)}</pre>`;
+            } catch (e) {
+                // Not JSON or invalid JSON, return as is with HTML escaping
+                return message;
+            }
+        }
+
+        // Format error type for display
+        function formatErrorType(type) {
+            if (!type) return '';
+            
+            // Determine badge class based on error type
+            let badgeClass = 'badge-danger';
+            if (type.toLowerCase().includes('device') || type === 'eDeviceSave') {
+                badgeClass = 'badge-device-save';
+                type = 'eDeviceSave';
+            } else if (type.toLowerCase().includes('login') || type === 'eLoginFail') {
+                badgeClass = 'badge-login-fail';
+                type = 'eLoginFail';
+            }
+            
+            return `<span class="error-badge ${badgeClass}">${type}</span>`;
+        }
+
+        // Show error details in modal
+        function showErrorDetails(message) {
+            const errorMsgElement = document.getElementById('errorMsgFull');
+            errorMsgElement.innerHTML = formatErrorMessage(message);
+            $('#errorDetailsModal').modal('show');
+        }
+
         // Load login errors data
         function loadData() {
             fetch(`/api/login-errors?page=${currentPage}&page_size=${pageSize}`)
@@ -159,6 +344,7 @@
                 })
                 .catch(error => {
                     console.error('Error fetching login errors:', error);
+                    toastr.error('Failed to load login errors');
                 });
         }
 
@@ -179,18 +365,30 @@
                 const row = document.createElement('tr');
                 const created = new Date(error.created_at);
                 
+                // Handle error type formatting
+                const errorTypeDisplay = formatErrorType(error.error_type);
+                
+                // Escape single quotes and double quotes in the error message to avoid JavaScript errors
+                const escapedErrorMsg = error.error_msg ? error.error_msg.replace(/"/g, '&quot;').replace(/'/g, "\\'") : '';
+                
                 row.innerHTML = `
                     <td>${error.id}</td>
-                    <td>${error.user_id}</td>
-                    <td>${error.user_name}</td>
-                    <td>${error.error_type}</td>
-                    <td>${error.error_msg}</td>
-                    <td>${error.ip}</td>
-                    <td>${error.platform}</td>
-                    <td>${error.device}</td>
-                    <td>${created.toLocaleString()}</td>
+                    <td>${error.user_id || ''}</td>
+                    <td>${error.user_name || ''}</td>
+                    <td>${errorTypeDisplay}</td>
+                    <td class="error-message-cell">
+                        <a href="javascript:void(0)" onclick="showErrorDetails('${escapedErrorMsg}')">
+                            ${error.error_msg || ''}
+                        </a>
+                    </td>
+                    <td>${error.ip || ''}</td>
+                    <td>${error.platform || ''}</td>
+                    <td>${error.device || ''}</td>
+                    <td><span class="text-muted"><i class="far fa-clock mr-1"></i>${created.toLocaleString()}</span></td>
                     <td>
-                        <button class="btn btn-sm btn-danger" onclick="deleteError(${error.id})">Delete</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteError(${error.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -208,11 +406,14 @@
             // Previous button
             const prevLi = document.createElement('li');
             prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
-            prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Previous</a>`;
+            prevLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage - 1})"><i class="fas fa-chevron-left"></i></a>`;
             paginationContainer.appendChild(prevLi);
 
             // Page numbers
-            for (let i = 1; i <= pageCount; i++) {
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(pageCount, startPage + 4);
+            
+            for (let i = startPage; i <= endPage; i++) {
                 const li = document.createElement('li');
                 li.className = `page-item ${i === currentPage ? 'active' : ''}`;
                 li.innerHTML = `<a class="page-link" href="#" onclick="changePage(${i})">${i}</a>`;
@@ -222,7 +423,7 @@
             // Next button
             const nextLi = document.createElement('li');
             nextLi.className = `page-item ${currentPage === pageCount ? 'disabled' : ''}`;
-            nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Next</a>`;
+            nextLi.innerHTML = `<a class="page-link" href="#" onclick="changePage(${currentPage + 1})"><i class="fas fa-chevron-right"></i></a>`;
             paginationContainer.appendChild(nextLi);
         }
 
@@ -262,8 +463,11 @@
             })
             .then(result => {
                 // Close the modal
-                const modal = bootstrap.Modal.getInstance(document.getElementById('addErrorModal'));
-                modal.hide();
+                $('#addErrorModal').modal('hide');
+                
+                // Display success message
+                // Here we would use toastr but let's keep it simple
+                alert('Login error added successfully');
                 
                 // Reload data
                 loadData();
@@ -290,6 +494,8 @@
                 return response.json();
             })
             .then(result => {
+                // Display success message
+                alert('Login error deleted successfully');
                 loadData();
             })
             .catch(error => {
